@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class Main {
+
+    static int n, m;
+    static int[][] grid;
+    static boolean[][] visited;
+
+    static int[] dx = {-1,-1,-1,0,0,1,1,1};
+    static int[] dy = {-1,0,1,-1,1,-1,0,1};
+
+    static int dfs(int x, int y) {
+        visited[x][y] = true;
+        int count = 1;
+
+        for(int i = 0; i < 8; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if(nx >= 0 && ny >= 0 && nx < n && ny < m &&
+               grid[nx][ny] == 1 && !visited[nx][ny]) {
+                count += dfs(nx, ny);
+            }
+        }
+
+        return count;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        n = sc.nextInt();
+        m = sc.nextInt();
+
+        grid = new int[n][m];
+        visited = new boolean[n][m];
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                grid[i][j] = sc.nextInt();
+            }
+        }
+
+        int maxRegion = 0;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(grid[i][j] == 1 && !visited[i][j]) {
+                    int size = dfs(i, j);
+                    maxRegion = Math.max(maxRegion, size);
+                }
+            }
+        }
+
+        System.out.println(maxRegion);
+    }
+}
